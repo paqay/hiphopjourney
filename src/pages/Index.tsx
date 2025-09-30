@@ -78,12 +78,12 @@ const Index = () => {
 
           <div className="flex flex-wrap gap-4 justify-center items-center pt-8 animate-slide-up" style={{ animationDelay: "0.4s" }}>
             <div className="glass rounded-2xl px-6 py-3">
-              <p className="text-sm text-muted-foreground">Schulart</p>
-              <p className="text-lg font-semibold">HTL Leonding</p>
+              <p className="text-sm text-muted-foreground">Schule</p>
+              <p className="text-lg font-semibold">HTL TGM</p>
             </div>
             <div className="glass rounded-2xl px-6 py-3">
-              <p className="text-sm text-muted-foreground">Abteilung</p>
-              <p className="text-lg font-semibold">HIT - 5DHITM</p>
+              <p className="text-sm text-muted-foreground">Klasse</p>
+              <p className="text-lg font-semibold">5DHITM</p>
             </div>
             <div className="glass rounded-2xl px-6 py-3">
               <p className="text-sm text-muted-foreground">Abgabe</p>
@@ -228,7 +228,7 @@ const Index = () => {
       <footer className="relative py-12 px-4 sm:px-6 lg:px-8 border-t border-border/50">
         <div className="max-w-6xl mx-auto text-center space-y-4">
           <p className="text-muted-foreground">
-            Diplomarbeit 2025/26 · HTL Leonding · Abteilung HIT
+            Diplomarbeit 2025/26 · HTL TGM · 5DHITM
           </p>
           <p className="text-sm text-muted-foreground">
             Betreuer: Alexander Wieser
