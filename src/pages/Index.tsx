@@ -79,6 +79,8 @@ const Index = () => {
               src={hiphopJourneyTag} 
               alt="Hip-Hop Journey" 
               className="w-full max-w-3xl mx-auto animate-float filter drop-shadow-2xl"
+
+              
             />
             <p className="text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto">
               Eine professionelle Musikproduktion im deutschen Trap-Genre
