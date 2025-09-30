@@ -1,5 +1,6 @@
-import { Music, Video, TrendingUp, Users } from "lucide-react";
+import { Music, Video, TrendingUp, Users, Mail, Calendar, CheckCircle2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import hiphopJourneyTag from "@/assets/hiphop-journey-tag.png";
 
 const Index = () => {
@@ -9,6 +10,7 @@ const Index = () => {
       role: "Music Production",
       focus: "Beat-Komposition, Mixing & Mastering",
       description: "Gestaltung, Produktion und Analyse von Rap-Parts, Beat-Komposition sowie Mixing & Mastering",
+      email: "jebner@student.tgm.ac.at",
       icon: Music,
       gradient: "from-primary to-secondary",
     },
@@ -17,6 +19,7 @@ const Index = () => {
       role: "Video Production",
       focus: "Kameraführung & Postproduktion",
       description: "Drehplanung, Kameraführung und Postproduktion des Musikvideos und der Promotionclips",
+      email: "mel2@student.tgm.ac.at",
       icon: Video,
       gradient: "from-secondary to-accent",
     },
@@ -25,9 +28,23 @@ const Index = () => {
       role: "Performance & Analytics",
       focus: "Rap-Performance & Data Science",
       description: "Gestaltung von Rap-Parts und Data Science Analyse der Promotion",
+      email: "tristic@student.tgm.ac.at",
       icon: TrendingUp,
       gradient: "from-accent to-primary",
     },
+  ];
+
+  const milestones = [
+    { date: "01.10.2025", title: "Songtext finalisiert und Beat-Grundlage erstellt" },
+    { date: "15.10.2025", title: "Rap-Parts aufgenommen und erste Songversion erstellt" },
+    { date: "10.11.2025", title: "Mix & Mastering abgeschlossen, finale Songversion fertig" },
+    { date: "25.11.2025", title: "Konzept für Musikvideo erstellt und Drehorte festgelegt" },
+    { date: "15.12.2025", title: "Musikvideodreh abgeschlossen" },
+    { date: "05.01.2026", title: "Rohschnitt des Musikvideos erstellt" },
+    { date: "20.01.2026", title: "Color Grading und visuelle Effekte abgeschlossen" },
+    { date: "05.02.2026", title: "Data-Science-Analyse zur Social-Media-Promotion abgeschlossen" },
+    { date: "05.03.2026", title: "Finaler Song und Musikvideo veröffentlicht" },
+    { date: "07.04.2026", title: "Abgabe" },
   ];
 
   const objectives = [
@@ -113,25 +130,50 @@ const Index = () => {
             {teamMembers.map((member, index) => {
               const Icon = member.icon;
               return (
-                <Card
-                  key={member.name}
-                  className="glass glass-hover border-0 p-8 space-y-6 animate-slide-up"
-                  style={{ animationDelay: `${0.1 * index}s` }}
-                >
-                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${member.gradient} flex items-center justify-center glow`}>
-                    <Icon className="w-8 h-8 text-white" />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <h3 className="text-2xl font-bold">{member.name}</h3>
-                    <p className="text-primary font-medium">{member.role}</p>
-                    <p className="text-sm text-muted-foreground font-medium">{member.focus}</p>
-                  </div>
+                <Dialog key={member.name}>
+                  <DialogTrigger asChild>
+                    <Card
+                      className="glass glass-hover border-0 p-8 space-y-6 animate-slide-up cursor-pointer transition-transform hover:scale-105"
+                      style={{ animationDelay: `${0.1 * index}s` }}
+                    >
+                      <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${member.gradient} flex items-center justify-center glow`}>
+                        <Icon className="w-8 h-8 text-white" />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <h3 className="text-2xl font-bold">{member.name}</h3>
+                        <p className="text-primary font-medium">{member.role}</p>
+                        <p className="text-sm text-muted-foreground font-medium">{member.focus}</p>
+                      </div>
 
-                  <p className="text-foreground/80 leading-relaxed">
-                    {member.description}
-                  </p>
-                </Card>
+                      <p className="text-foreground/80 leading-relaxed">
+                        {member.description}
+                      </p>
+                    </Card>
+                  </DialogTrigger>
+                  <DialogContent className="glass border-border/50">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl font-bold">{member.name}</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-6">
+                      <div className="flex justify-center">
+                        <div className={`w-48 h-48 rounded-2xl bg-gradient-to-br ${member.gradient} flex items-center justify-center glow`}>
+                          <Icon className="w-24 h-24 text-white" />
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        <p className="text-lg font-medium text-primary">{member.role}</p>
+                        <p className="text-muted-foreground">{member.focus}</p>
+                        <div className="flex items-center gap-2 pt-4">
+                          <Mail className="w-5 h-5 text-primary" />
+                          <a href={`mailto:${member.email}`} className="text-foreground hover:text-primary transition-colors">
+                            {member.email}
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               );
             })}
           </div>
@@ -220,6 +262,52 @@ const Index = () => {
                   </p>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Milestones Section */}
+      <section className="relative py-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16 space-y-4">
+            <div className="inline-flex items-center gap-2 glass rounded-full px-6 py-2 mb-4">
+              <Calendar className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium">Zeitplan</span>
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-bold">
+              Projekt <span className="gradient-text">Meilensteine</span>
+            </h2>
+          </div>
+
+          <div className="relative">
+            {/* Timeline line */}
+            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary to-accent" />
+            
+            <div className="space-y-8">
+              {milestones.map((milestone, index) => (
+                <div
+                  key={index}
+                  className="relative pl-20 animate-slide-up"
+                  style={{ animationDelay: `${0.05 * index}s` }}
+                >
+                  {/* Timeline dot */}
+                  <div className="absolute left-6 top-6 w-5 h-5 rounded-full bg-gradient-to-br from-primary to-secondary glow flex items-center justify-center">
+                    <CheckCircle2 className="w-3 h-3 text-white" />
+                  </div>
+                  
+                  <div className="glass glass-hover rounded-2xl p-6 space-y-2">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="text-sm font-semibold text-primary px-3 py-1 rounded-full glass">
+                        {milestone.date}
+                      </span>
+                      <h3 className="text-lg font-semibold text-foreground">
+                        {milestone.title}
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
