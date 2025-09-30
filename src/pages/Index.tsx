@@ -1,5 +1,6 @@
 import { Music, Video, TrendingUp, Users } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import hiphopJourneyTag from "@/assets/hiphop-journey-tag.png";
 
 const Index = () => {
   const teamMembers = [
@@ -56,12 +57,12 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto text-center space-y-8 animate-fade-in">
-          <div className="space-y-4">
-            <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight">
-              <span className="gradient-text">Hip Hop</span>
-              <br />
-              <span className="text-foreground">Journey</span>
-            </h1>
+          <div className="space-y-8">
+            <img 
+              src={hiphopJourneyTag} 
+              alt="Hip-Hop Journey" 
+              className="w-full max-w-3xl mx-auto animate-float filter drop-shadow-2xl"
+            />
             <p className="text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto">
               Eine professionelle Musikproduktion im deutschen Trap-Genre
             </p>
