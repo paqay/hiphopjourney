@@ -1,9 +1,15 @@
 import { Music, Video, TrendingUp, Users, Mail, Calendar, CheckCircle2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import hiphopJourneyTag from "@/assets/hiphop-journey-tag.png";
+import { useState } from "react";
 
 const Index = () => {
+  const [flippedCards, setFlippedCards] = useState<{ [key: string]: boolean }>({});
+
+  const toggleCard = (name: string) => {
+    setFlippedCards(prev => ({ ...prev, [name]: !prev[name] }));
+  };
+
   const teamMembers = [
     {
       name: "Jakob Ebner",
@@ -131,13 +137,21 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {teamMembers.map((member, index) => {
               const Icon = member.icon;
+              const isFlipped = flippedCards[member.name];
               return (
-                <Dialog key={member.name}>
-                  <DialogTrigger asChild>
-                    <Card
-                      className="glass glass-hover border-0 p-8 space-y-6 animate-slide-up cursor-pointer transition-transform hover:scale-105"
-                      style={{ animationDelay: `${0.1 * index}s` }}
-                    >
+                <div
+                  key={member.name}
+                  className="perspective-1000 h-[400px] animate-slide-up cursor-pointer"
+                  style={{ animationDelay: `${0.1 * index}s` }}
+                  onClick={() => toggleCard(member.name)}
+                >
+                  <div
+                    className={`relative w-full h-full transition-transform duration-700 transform-style-3d ${
+                      isFlipped ? "rotate-y-180" : ""
+                    }`}
+                  >
+                    {/* Vorderseite */}
+                    <Card className="absolute w-full h-full glass glass-hover border-0 p-8 space-y-6 backface-hidden">
                       <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${member.gradient} flex items-center justify-center glow`}>
                         <Icon className="w-8 h-8 text-white" />
                       </div>
@@ -152,30 +166,29 @@ const Index = () => {
                         {member.description}
                       </p>
                     </Card>
-                  </DialogTrigger>
-                  <DialogContent className="glass border-border/50">
-                    <DialogHeader>
-                      <DialogTitle className="text-2xl font-bold">{member.name}</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-6">
-                      <div className="flex justify-center">
-                        <div className={`w-48 h-48 rounded-2xl bg-gradient-to-br ${member.gradient} flex items-center justify-center glow`}>
-                          <Icon className="w-24 h-24 text-white" />
-                        </div>
+
+                    {/* Rückseite */}
+                    <Card className="absolute w-full h-full glass glass-hover border-0 p-8 rotate-y-180 backface-hidden flex flex-col items-center justify-center space-y-6">
+                      <div className={`w-48 h-48 rounded-2xl bg-gradient-to-br ${member.gradient} flex items-center justify-center glow`}>
+                        <Icon className="w-24 h-24 text-white" />
                       </div>
-                      <div className="space-y-3">
+                      <div className="space-y-3 text-center">
+                        <h3 className="text-2xl font-bold">{member.name}</h3>
                         <p className="text-lg font-medium text-primary">{member.role}</p>
-                        <p className="text-muted-foreground">{member.focus}</p>
-                        <div className="flex items-center gap-2 pt-4">
+                        <div className="flex items-center gap-2 justify-center pt-4">
                           <Mail className="w-5 h-5 text-primary" />
-                          <a href={`mailto:${member.email}`} className="text-foreground hover:text-primary transition-colors">
+                          <a 
+                            href={`mailto:${member.email}`} 
+                            className="text-foreground hover:text-primary transition-colors"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             {member.email}
                           </a>
                         </div>
                       </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                    </Card>
+                  </div>
+                </div>
               );
             })}
           </div>
@@ -283,33 +296,40 @@ const Index = () => {
           </div>
 
           <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary to-accent" />
-            
             <div className="space-y-8">
-              {milestones.map((milestone, index) => (
-                <div
-                  key={index}
-                  className="relative pl-20 animate-slide-up"
-                  style={{ animationDelay: `${0.05 * index}s` }}
-                >
-                  {/* Timeline dot */}
-                  <div className="absolute left-6 top-6 w-5 h-5 rounded-full bg-gradient-to-br from-primary to-secondary glow flex items-center justify-center">
-                    <CheckCircle2 className="w-3 h-3 text-white" />
-                  </div>
-                  
-                  <div className="glass glass-hover rounded-2xl p-6 space-y-2">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <span className="text-sm font-semibold text-primary px-3 py-1 rounded-full glass">
-                        {milestone.date}
-                      </span>
-                      <h3 className="text-lg font-semibold text-foreground">
-                        {milestone.title}
-                      </h3>
+              {milestones.map((milestone, index) => {
+                const isFirst = index === 0;
+                const isLast = index === milestones.length - 1;
+                
+                return (
+                  <div
+                    key={index}
+                    className="relative pl-20 animate-slide-up"
+                    style={{ animationDelay: `${0.05 * index}s` }}
+                  >
+                    {/* Timeline line - nur zwischen Elementen */}
+                    {!isLast && (
+                      <div className="absolute left-8 top-6 w-0.5 h-[calc(100%+2rem)] bg-gradient-to-b from-primary via-secondary to-accent" />
+                    )}
+                    
+                    {/* Timeline dot */}
+                    <div className="absolute left-6 top-6 w-5 h-5 rounded-full bg-gradient-to-br from-primary to-secondary glow flex items-center justify-center z-10">
+                      <CheckCircle2 className="w-3 h-3 text-white" />
+                    </div>
+                    
+                    <div className="glass glass-hover rounded-2xl p-6 space-y-2">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <span className="text-sm font-semibold text-primary px-3 py-1 rounded-full glass">
+                          {milestone.date}
+                        </span>
+                        <h3 className="text-lg font-semibold text-foreground">
+                          {milestone.title}
+                        </h3>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
