@@ -1,9 +1,30 @@
 import { Music, Video, TrendingUp, Users, Mail, Calendar, CheckCircle2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import hiphopJourneyTag from "@/assets/hiphop-journey-tag.svg";
+import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
+import hiphopJourneyTag from "@/assets/hiphop-journey-tag.png";
+import { useState } from "react";
 
 const Index = () => {
+  const [flippedCards, setFlippedCards] = useState<{ [key: string]: boolean }>({});
+
+  const toggleCard = (name: string) => {
+    setFlippedCards(prev => ({ ...prev, [name]: !prev[name] }));
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const offset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+  };
+
   const teamMembers = [
     {
       name: "Jakob Ebner",
@@ -64,6 +85,54 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
+      {/* Navigation Menubar */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
+        <div className="container mx-auto px-6 py-3 flex justify-center">
+          <Menubar className="bg-transparent border-0 space-x-2">
+            <MenubarMenu>
+              <MenubarTrigger 
+                onClick={() => scrollToSection('hero')}
+                className="cursor-pointer hover:text-primary transition-colors"
+              >
+                Home
+              </MenubarTrigger>
+            </MenubarMenu>
+            <MenubarMenu>
+              <MenubarTrigger 
+                onClick={() => scrollToSection('team')}
+                className="cursor-pointer hover:text-primary transition-colors"
+              >
+                Team
+              </MenubarTrigger>
+            </MenubarMenu>
+            <MenubarMenu>
+              <MenubarTrigger 
+                onClick={() => scrollToSection('objectives')}
+                className="cursor-pointer hover:text-primary transition-colors"
+              >
+                Objectives
+              </MenubarTrigger>
+            </MenubarMenu>
+            <MenubarMenu>
+              <MenubarTrigger 
+                onClick={() => scrollToSection('results')}
+                className="cursor-pointer hover:text-primary transition-colors"
+              >
+                Results
+              </MenubarTrigger>
+            </MenubarMenu>
+            <MenubarMenu>
+              <MenubarTrigger 
+                onClick={() => scrollToSection('milestones')}
+                className="cursor-pointer hover:text-primary transition-colors"
+              >
+                Milestones
+              </MenubarTrigger>
+            </MenubarMenu>
+          </Menubar>
+        </div>
+      </div>
+
       {/* Animated background orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float" />
@@ -72,7 +141,7 @@ const Index = () => {
       </div>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <section id="hero" className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20">
         <div className="max-w-6xl mx-auto text-center space-y-8 animate-fade-in">
           <div className="space-y-8">
             <img 
@@ -114,7 +183,7 @@ const Index = () => {
       </section>
 
       {/* Team Section */}
-      <section className="relative py-24 px-4 sm:px-6 lg:px-8">
+      <section id="team" className="relative py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 space-y-4">
             <div className="inline-flex items-center gap-2 glass rounded-full px-6 py-2 mb-4">
@@ -131,13 +200,21 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {teamMembers.map((member, index) => {
               const Icon = member.icon;
+              const isFlipped = flippedCards[member.name];
               return (
-                <Dialog key={member.name}>
-                  <DialogTrigger asChild>
-                    <Card
-                      className="glass glass-hover border-0 p-8 space-y-6 animate-slide-up cursor-pointer transition-transform hover:scale-105"
-                      style={{ animationDelay: `${0.1 * index}s` }}
-                    >
+                <div
+                  key={member.name}
+                  className="perspective-1000 h-[400px] animate-slide-up cursor-pointer"
+                  style={{ animationDelay: `${0.1 * index}s` }}
+                  onClick={() => toggleCard(member.name)}
+                >
+                  <div
+                    className={`relative w-full h-full transition-transform duration-700 transform-style-3d ${
+                      isFlipped ? "rotate-y-180" : ""
+                    }`}
+                  >
+                    {/* Vorderseite */}
+                    <Card className="absolute w-full h-full glass border-0 p-8 space-y-6 backface-hidden transition-shadow duration-300 hover:shadow-[0_0_60px_hsl(0_84%_60%/0.4)]">
                       <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${member.gradient} flex items-center justify-center glow`}>
                         <Icon className="w-8 h-8 text-white" />
                       </div>
@@ -152,30 +229,29 @@ const Index = () => {
                         {member.description}
                       </p>
                     </Card>
-                  </DialogTrigger>
-                  <DialogContent className="glass border-border/50">
-                    <DialogHeader>
-                      <DialogTitle className="text-2xl font-bold">{member.name}</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-6">
-                      <div className="flex justify-center">
-                        <div className={`w-48 h-48 rounded-2xl bg-gradient-to-br ${member.gradient} flex items-center justify-center glow`}>
-                          <Icon className="w-24 h-24 text-white" />
-                        </div>
+
+                    {/* Rückseite */}
+                    <Card className="absolute w-full h-full glass border-0 p-8 rotate-y-180 backface-hidden flex flex-col items-center justify-center space-y-6 transition-shadow duration-300 hover:shadow-[0_0_60px_hsl(0_84%_60%/0.4)]">
+                      <div className={`w-48 h-48 rounded-2xl bg-gradient-to-br ${member.gradient} flex items-center justify-center glow`}>
+                        <Icon className="w-24 h-24 text-white" />
                       </div>
-                      <div className="space-y-3">
+                      <div className="space-y-3 text-center">
+                        <h3 className="text-2xl font-bold">{member.name}</h3>
                         <p className="text-lg font-medium text-primary">{member.role}</p>
-                        <p className="text-muted-foreground">{member.focus}</p>
-                        <div className="flex items-center gap-2 pt-4">
+                        <div className="flex items-center gap-2 justify-center pt-4">
                           <Mail className="w-5 h-5 text-primary" />
-                          <a href={`mailto:${member.email}`} className="text-foreground hover:text-primary transition-colors">
+                          <a 
+                            href={`mailto:${member.email}`} 
+                            className="text-foreground hover:text-primary transition-colors"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             {member.email}
                           </a>
                         </div>
                       </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                    </Card>
+                  </div>
+                </div>
               );
             })}
           </div>
@@ -183,7 +259,7 @@ const Index = () => {
       </section>
 
       {/* Objectives Section */}
-      <section className="relative py-24 px-4 sm:px-6 lg:px-8">
+      <section id="objectives" className="relative py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-4xl sm:text-5xl font-bold">
@@ -212,7 +288,7 @@ const Index = () => {
       </section>
 
       {/* Results Section */}
-      <section className="relative py-24 px-4 sm:px-6 lg:px-8">
+      <section id="results" className="relative py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-4xl sm:text-5xl font-bold">
@@ -270,7 +346,7 @@ const Index = () => {
       </section>
 
       {/* Milestones Section */}
-      <section className="relative py-24 px-4 sm:px-6 lg:px-8">
+      <section id="milestones" className="relative py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-4">
             <div className="inline-flex items-center gap-2 glass rounded-full px-6 py-2 mb-4">
@@ -283,33 +359,40 @@ const Index = () => {
           </div>
 
           <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary to-accent" />
-            
             <div className="space-y-8">
-              {milestones.map((milestone, index) => (
-                <div
-                  key={index}
-                  className="relative pl-20 animate-slide-up"
-                  style={{ animationDelay: `${0.05 * index}s` }}
-                >
-                  {/* Timeline dot */}
-                  <div className="absolute left-6 top-6 w-5 h-5 rounded-full bg-gradient-to-br from-primary to-secondary glow flex items-center justify-center">
-                    <CheckCircle2 className="w-3 h-3 text-white" />
-                  </div>
-                  
-                  <div className="glass glass-hover rounded-2xl p-6 space-y-2">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <span className="text-sm font-semibold text-primary px-3 py-1 rounded-full glass">
-                        {milestone.date}
-                      </span>
-                      <h3 className="text-lg font-semibold text-foreground">
-                        {milestone.title}
-                      </h3>
+              {milestones.map((milestone, index) => {
+                const isFirst = index === 0;
+                const isLast = index === milestones.length - 1;
+                
+                return (
+                  <div
+                    key={index}
+                    className="relative pl-20 animate-slide-up"
+                    style={{ animationDelay: `${0.05 * index}s` }}
+                  >
+                    {/* Timeline line - nur zwischen Elementen */}
+                    {!isLast && (
+                      <div className="absolute left-8 top-6 w-0.5 h-[calc(100%+2rem)] bg-gradient-to-b from-primary via-secondary to-accent" />
+                    )}
+                    
+                    {/* Timeline dot */}
+                    <div className="absolute left-6 top-6 w-5 h-5 rounded-full bg-gradient-to-br from-primary to-secondary glow flex items-center justify-center z-10">
+                      <CheckCircle2 className="w-3 h-3 text-white" />
+                    </div>
+                    
+                    <div className="glass glass-hover rounded-2xl p-6 space-y-2">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <span className="text-sm font-semibold text-primary px-3 py-1 rounded-full glass">
+                          {milestone.date}
+                        </span>
+                        <h3 className="text-lg font-semibold text-foreground">
+                          {milestone.title}
+                        </h3>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
