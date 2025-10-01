@@ -1,5 +1,6 @@
 import { Music, Video, TrendingUp, Users, Mail, Calendar, CheckCircle2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
 import hiphopJourneyTag from "@/assets/hiphop-journey-tag.png";
 import { useState } from "react";
 
@@ -8,6 +9,20 @@ const Index = () => {
 
   const toggleCard = (name: string) => {
     setFlippedCards(prev => ({ ...prev, [name]: !prev[name] }));
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const offset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
   };
 
   const teamMembers = [
@@ -70,6 +85,54 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
+      {/* Navigation Menubar */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
+        <div className="container mx-auto px-6 py-3 flex justify-center">
+          <Menubar className="bg-transparent border-0 space-x-2">
+            <MenubarMenu>
+              <MenubarTrigger 
+                onClick={() => scrollToSection('hero')}
+                className="cursor-pointer hover:text-primary transition-colors"
+              >
+                Home
+              </MenubarTrigger>
+            </MenubarMenu>
+            <MenubarMenu>
+              <MenubarTrigger 
+                onClick={() => scrollToSection('team')}
+                className="cursor-pointer hover:text-primary transition-colors"
+              >
+                Team
+              </MenubarTrigger>
+            </MenubarMenu>
+            <MenubarMenu>
+              <MenubarTrigger 
+                onClick={() => scrollToSection('objectives')}
+                className="cursor-pointer hover:text-primary transition-colors"
+              >
+                Objectives
+              </MenubarTrigger>
+            </MenubarMenu>
+            <MenubarMenu>
+              <MenubarTrigger 
+                onClick={() => scrollToSection('results')}
+                className="cursor-pointer hover:text-primary transition-colors"
+              >
+                Results
+              </MenubarTrigger>
+            </MenubarMenu>
+            <MenubarMenu>
+              <MenubarTrigger 
+                onClick={() => scrollToSection('milestones')}
+                className="cursor-pointer hover:text-primary transition-colors"
+              >
+                Milestones
+              </MenubarTrigger>
+            </MenubarMenu>
+          </Menubar>
+        </div>
+      </div>
+
       {/* Animated background orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float" />
@@ -78,7 +141,7 @@ const Index = () => {
       </div>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <section id="hero" className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20">
         <div className="max-w-6xl mx-auto text-center space-y-8 animate-fade-in">
           <div className="space-y-8">
             <img 
@@ -120,7 +183,7 @@ const Index = () => {
       </section>
 
       {/* Team Section */}
-      <section className="relative py-24 px-4 sm:px-6 lg:px-8">
+      <section id="team" className="relative py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 space-y-4">
             <div className="inline-flex items-center gap-2 glass rounded-full px-6 py-2 mb-4">
@@ -196,7 +259,7 @@ const Index = () => {
       </section>
 
       {/* Objectives Section */}
-      <section className="relative py-24 px-4 sm:px-6 lg:px-8">
+      <section id="objectives" className="relative py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-4xl sm:text-5xl font-bold">
@@ -225,7 +288,7 @@ const Index = () => {
       </section>
 
       {/* Results Section */}
-      <section className="relative py-24 px-4 sm:px-6 lg:px-8">
+      <section id="results" className="relative py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-4xl sm:text-5xl font-bold">
@@ -283,7 +346,7 @@ const Index = () => {
       </section>
 
       {/* Milestones Section */}
-      <section className="relative py-24 px-4 sm:px-6 lg:px-8">
+      <section id="milestones" className="relative py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-4">
             <div className="inline-flex items-center gap-2 glass rounded-full px-6 py-2 mb-4">
