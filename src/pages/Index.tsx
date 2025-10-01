@@ -151,7 +151,7 @@ const Index = () => {
                     }`}
                   >
                     {/* Vorderseite */}
-                    <Card className="absolute w-full h-full glass glass-hover border-0 p-8 space-y-6 backface-hidden">
+                    <Card className="absolute w-full h-full glass border-0 p-8 space-y-6 backface-hidden transition-shadow duration-300 hover:shadow-[0_0_60px_hsl(0_84%_60%/0.4)]">
                       <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${member.gradient} flex items-center justify-center glow`}>
                         <Icon className="w-8 h-8 text-white" />
                       </div>
@@ -168,7 +168,7 @@ const Index = () => {
                     </Card>
 
                     {/* Rückseite */}
-                    <Card className="absolute w-full h-full glass glass-hover border-0 p-8 rotate-y-180 backface-hidden flex flex-col items-center justify-center space-y-6">
+                    <Card className="absolute w-full h-full glass border-0 p-8 rotate-y-180 backface-hidden flex flex-col items-center justify-center space-y-6 transition-shadow duration-300 hover:shadow-[0_0_60px_hsl(0_84%_60%/0.4)]">
                       <div className={`w-48 h-48 rounded-2xl bg-gradient-to-br ${member.gradient} flex items-center justify-center glow`}>
                         <Icon className="w-24 h-24 text-white" />
                       </div>
