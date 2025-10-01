@@ -1,7 +1,7 @@
 import { Music, Video, TrendingUp, Users, Mail, Calendar, CheckCircle2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import hiphopJourneyTag from "@/assets/hiphop-journey-tag.png";
+import hiphopJourneyTag from "@/assets/hiphop-journey-tag.svg";
 
 const Index = () => {
   const teamMembers = [
