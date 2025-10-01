@@ -2,14 +2,38 @@ import { Music, Video, TrendingUp, Users, Mail, Calendar, CheckCircle2 } from "l
 import { Card } from "@/components/ui/card";
 import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
 import hiphopJourneyTag from "@/assets/hiphop-journey-tag.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Index = () => {
   const [flippedCards, setFlippedCards] = useState<{ [key: string]: boolean }>({});
+  const [activeSection, setActiveSection] = useState("hero");
 
   const toggleCard = (name: string) => {
     setFlippedCards(prev => ({ ...prev, [name]: !prev[name] }));
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ["hero", "team", "objectives", "results", "milestones"];
+      const scrollPosition = window.scrollY + 200;
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const offsetTop = element.offsetTop;
+          const offsetBottom = offsetTop + element.offsetHeight;
+
+          if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -83,52 +107,44 @@ const Index = () => {
     },
   ];
 
+  const menuItems = [
+    { id: "hero", label: "Start" },
+    { id: "team", label: "Team" },
+    { id: "objectives", label: "Ziele" },
+    { id: "results", label: "Ergebnisse" },
+    { id: "milestones", label: "Meilensteine" }
+  ];
+
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Navigation Menubar */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-[40px] backdrop-saturate-[180%] border-b border-border/30 shadow-lg">
         <div className="container mx-auto px-6 py-3 flex justify-center">
-          <Menubar className="bg-transparent border-0 space-x-2">
-            <MenubarMenu>
-              <MenubarTrigger 
-                onClick={() => scrollToSection('hero')}
-                className="cursor-pointer hover:text-primary transition-colors"
-              >
-                Home
-              </MenubarTrigger>
-            </MenubarMenu>
-            <MenubarMenu>
-              <MenubarTrigger 
-                onClick={() => scrollToSection('team')}
-                className="cursor-pointer hover:text-primary transition-colors"
-              >
-                Team
-              </MenubarTrigger>
-            </MenubarMenu>
-            <MenubarMenu>
-              <MenubarTrigger 
-                onClick={() => scrollToSection('objectives')}
-                className="cursor-pointer hover:text-primary transition-colors"
-              >
-                Objectives
-              </MenubarTrigger>
-            </MenubarMenu>
-            <MenubarMenu>
-              <MenubarTrigger 
-                onClick={() => scrollToSection('results')}
-                className="cursor-pointer hover:text-primary transition-colors"
-              >
-                Results
-              </MenubarTrigger>
-            </MenubarMenu>
-            <MenubarMenu>
-              <MenubarTrigger 
-                onClick={() => scrollToSection('milestones')}
-                className="cursor-pointer hover:text-primary transition-colors"
-              >
-                Milestones
-              </MenubarTrigger>
-            </MenubarMenu>
+          <Menubar className="bg-transparent border-0 space-x-1 relative">
+            {menuItems.map((item) => (
+              <MenubarMenu key={item.id}>
+                <MenubarTrigger 
+                  onClick={() => scrollToSection(item.id)}
+                  className={`cursor-pointer transition-all duration-300 px-4 py-2 rounded-lg relative z-10 ${
+                    activeSection === item.id 
+                      ? "text-white" 
+                      : "hover:text-primary"
+                  }`}
+                >
+                  {item.label}
+                </MenubarTrigger>
+              </MenubarMenu>
+            ))}
+            {/* Liquid indicator */}
+            <div
+              className="absolute h-10 bg-gradient-to-r from-primary to-secondary rounded-lg transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] z-0"
+              style={{
+                left: `${menuItems.findIndex(item => item.id === activeSection) * 20}%`,
+                width: "18%",
+                filter: "blur(2px)",
+                boxShadow: "0 0 20px hsl(var(--primary) / 0.6)"
+              }}
+            />
           </Menubar>
         </div>
       </div>
