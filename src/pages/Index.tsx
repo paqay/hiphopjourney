@@ -15,12 +15,12 @@ const Index = () => {
   useEffect(() => {
     const handleScroll = () => {
       const sections = ["hero", "team", "objectives", "results", "milestones"];
-      const scrollPosition = window.scrollY + 200;
+      const scrollPosition = window.scrollY + 100; // More responsive scroll detection
 
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
-          const offsetTop = element.offsetTop;
+          const offsetTop = element.offsetTop - 150; // Start transition earlier
           const offsetBottom = offsetTop + element.offsetHeight;
 
           if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
@@ -31,7 +31,8 @@ const Index = () => {
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Call immediately on mount
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -137,12 +138,11 @@ const Index = () => {
             ))}
             {/* Liquid indicator */}
             <div
-              className="absolute h-10 bg-gradient-to-r from-primary to-secondary rounded-lg transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] z-0"
+              className="absolute h-10 bg-primary rounded-lg transition-all duration-500 ease-out z-0"
               style={{
-                left: `${menuItems.findIndex(item => item.id === activeSection) * 20}%`,
-                width: "18%",
-                filter: "blur(2px)",
-                boxShadow: "0 0 20px hsl(var(--primary) / 0.6)"
+                left: `${menuItems.findIndex(item => item.id === activeSection) * (100 / menuItems.length)}%`,
+                width: `${100 / menuItems.length}%`,
+                boxShadow: "0 0 20px hsl(var(--primary) / 0.6), 0 0 40px hsl(var(--primary) / 0.3)"
               }}
             />
           </Menubar>
