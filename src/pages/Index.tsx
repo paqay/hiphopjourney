@@ -126,9 +126,9 @@ const Index = () => {
               <MenubarMenu key={item.id}>
                 <MenubarTrigger 
                   onClick={() => scrollToSection(item.id)}
-                  className={`cursor-pointer transition-all duration-300 px-4 py-2 rounded-lg relative z-10 ${
+                  className={`cursor-pointer transition-all duration-300 px-4 py-2 rounded-lg ${
                     activeSection === item.id 
-                      ? "text-white" 
+                      ? "text-primary" 
                       : "hover:text-primary"
                   }`}
                 >
@@ -136,15 +136,6 @@ const Index = () => {
                 </MenubarTrigger>
               </MenubarMenu>
             ))}
-            {/* Liquid indicator */}
-            <div
-              className="absolute h-10 bg-primary rounded-lg transition-all duration-500 ease-out z-0"
-              style={{
-                left: `${menuItems.findIndex(item => item.id === activeSection) * (100 / menuItems.length)}%`,
-                width: `${100 / menuItems.length}%`,
-                boxShadow: "0 0 20px hsl(var(--primary) / 0.6), 0 0 40px hsl(var(--primary) / 0.3)"
-              }}
-            />
           </Menubar>
         </div>
       </div>
