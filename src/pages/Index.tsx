@@ -2,6 +2,7 @@ import { Music, Video, TrendingUp, Users, Mail, Calendar, CheckCircle2 } from "l
 import { Card } from "@/components/ui/card";
 import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
 import hiphopJourneyTag from "@/assets/hiphop-journey-tag.png";
+import logoImage from "@/assets/HHJ_logo_w.png";
 import { useState, useEffect } from "react";
 
 const Index = () => {
@@ -127,12 +128,24 @@ const Index = () => {
                 <MenubarTrigger 
                   onClick={() => scrollToSection(item.id)}
                   className={`cursor-pointer transition-all duration-300 px-4 py-2 rounded-lg ${
-                    activeSection === item.id 
+                    item.id === "hero" ? "" : (activeSection === item.id 
                       ? "text-primary" 
-                      : "hover:text-primary"
+                      : "hover:text-primary")
                   }`}
                 >
-                  {item.label}
+                  {item.id === "hero" ? (
+                    <img 
+                      src={logoImage} 
+                      alt="Logo" 
+                      className={`h-6 transition-all duration-300 ${
+                        activeSection === "hero"
+                          ? "brightness-0 saturate-100 invert-[43%] sepia-[98%] saturate-[7496%] hue-rotate-[357deg] brightness-[100%] contrast-[108%]"
+                          : "hover:brightness-0 hover:saturate-100 hover:invert-[43%] hover:sepia-[98%] hover:saturate-[7496%] hover:hue-rotate-[357deg] hover:brightness-[100%] hover:contrast-[108%]"
+                      }`}
+                    />
+                  ) : (
+                    item.label
+                  )}
                 </MenubarTrigger>
               </MenubarMenu>
             ))}
