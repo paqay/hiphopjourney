@@ -1,7 +1,7 @@
 import { Music, Video, TrendingUp, Users, Mail, Calendar, CheckCircle2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
-import hiphopJourneyTag from "@/assets/hiphop-journey-tag.png";
+import hiphopJourneyTag from "@/assets/hiphop-journey-tag.svg";
 import logoImage from "@/assets/HHJ_logo_w.png";
 import { useState, useEffect } from "react";
 
@@ -186,10 +186,12 @@ const Index = () => {
           </div>
 
           <div className="flex flex-wrap gap-4 justify-center items-center pt-8 animate-slide-up" style={{ animationDelay: "0.4s" }}>
-            <div className="glass rounded-2xl px-6 py-3">
+            <a target="_blank" href="https://www.tgm.ac.at/">
+            <div className="glass glass-hover rounded-2xl px-6 py-3">
               <p className="text-sm text-muted-foreground">Schule</p>
-              <p className="text-lg font-semibold">HTL TGM</p>
+              <p className="text-lg font-semibold">TGM</p>
             </div>
+            </a>
             <div className="glass rounded-2xl px-6 py-3">
               <p className="text-sm text-muted-foreground">Klasse</p>
               <p className="text-lg font-semibold">5DHITM</p>
@@ -242,7 +244,7 @@ const Index = () => {
                       <div className="space-y-2">
                         <h3 className="text-2xl font-bold">{member.name}</h3>
                         <p className="text-primary font-medium">{member.role}</p>
-                        <p className="text-sm text-muted-foreground font-medium">{member.focus}</p>
+                        {/* <p className="text-sm text-muted-foreground font-medium">{member.focus}</p> */}
                       </div>
 
                       <p className="text-foreground/80 leading-relaxed">
