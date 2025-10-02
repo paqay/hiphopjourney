@@ -139,8 +139,8 @@ const Index = () => {
                       alt="Logo" 
                       className={`h-6 transition-all duration-300 ${
                         activeSection === "hero"
-                          ? "brightness-0 saturate-100 invert-[43%] sepia-[98%] saturate-[7496%] hue-rotate-[357deg] brightness-[100%] contrast-[108%]"
-                          : "hover:brightness-0 hover:saturate-100 hover:invert-[43%] hover:sepia-[98%] hover:saturate-[7496%] hover:hue-rotate-[357deg] hover:brightness-[100%] hover:contrast-[108%]"
+                          ? "[filter:brightness(0)_saturate(100%)_invert(29%)_sepia(95%)_saturate(7441%)_hue-rotate(357deg)_brightness(99%)_contrast(117%)]"
+                          : "hover:[filter:brightness(0)_saturate(100%)_invert(29%)_sepia(95%)_saturate(7441%)_hue-rotate(357deg)_brightness(99%)_contrast(117%)]"
                       }`}
                     />
                   ) : (
