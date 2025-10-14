@@ -43,7 +43,7 @@ const Index = () => {
       const offset = 80;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
-      
+
       window.scrollTo({
         top: offsetPosition,
         behavior: "smooth"
@@ -125,23 +125,21 @@ const Index = () => {
           <Menubar className="bg-transparent border-0 space-x-1 relative">
             {menuItems.map((item) => (
               <MenubarMenu key={item.id}>
-                <MenubarTrigger 
+                <MenubarTrigger
                   onClick={() => scrollToSection(item.id)}
-                  className={`cursor-pointer transition-all duration-300 px-4 py-2 rounded-lg ${
-                    item.id === "hero" ? "" : (activeSection === item.id 
-                      ? "text-primary" 
+                  className={`cursor-pointer transition-all duration-300 px-4 py-2 rounded-lg ${item.id === "hero" ? "" : (activeSection === item.id
+                      ? "text-primary"
                       : "hover:text-primary")
-                  }`}
+                    }`}
                 >
                   {item.id === "hero" ? (
-                    <img 
-                      src={logoImage} 
-                      alt="Logo" 
-                      className={`h-6 transition-all duration-300 ${
-                        activeSection === "hero"
+                    <img
+                      src={logoImage}
+                      alt="Logo"
+                      className={`h-6 transition-all duration-300 ${activeSection === "hero"
                           ? "[filter:brightness(0)_saturate(100%)_invert(29%)_sepia(95%)_saturate(7441%)_hue-rotate(357deg)_brightness(99%)_contrast(117%)]"
                           : "hover:[filter:brightness(0)_saturate(100%)_invert(29%)_sepia(95%)_saturate(7441%)_hue-rotate(357deg)_brightness(99%)_contrast(117%)]"
-                      }`}
+                        }`}
                     />
                   ) : (
                     item.label
@@ -164,16 +162,26 @@ const Index = () => {
       <section id="hero" className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20">
         <div className="max-w-6xl mx-auto text-center space-y-8 animate-fade-in">
           <div className="space-y-8">
-          <video
-            src={hiphopJourneyTag}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full max-w-3xl mx-auto animate-float filter drop-shadow-2xl rounded-2xl"
+            <video
+              ref={(video) => {
+                if (video) {
+                  video.onended = () => {
+                    setTimeout(() => {
+                      video.currentTime = 0;
+                      video.play();
+                    }, 1000); // Wait 2 seconds before restarting
+                  };
+                }
+              }}
+              src={hiphopJourneyTag}
+              autoPlay
+              muted
+              playsInline
+              className="w-full max-w-3xl mx-auto animate-float filter drop-shadow-2xl rounded-2xl"
             >
-            Your browser does not support the video tag.
-          </video>
+              Your browser does not support the video tag.
+            </video>
+
 
             <p className="text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto">
               Eine professionelle Musikproduktion im deutschen Trap-Genre
@@ -182,19 +190,19 @@ const Index = () => {
 
           <div className="glass glass-hover rounded-3xl p-8 sm:p-12 max-w-4xl mx-auto mt-12 animate-slide-up" style={{ animationDelay: "0.2s" }}>
             <p className="text-lg sm:text-xl leading-relaxed text-foreground/90">
-              Deutscher Trap zählt zu den am stärksten wachsenden Genres im deutschsprachigen Raum. 
-              Diese Diplomarbeit dokumentiert den Ablauf einer professionellen Musikproduktion, 
-              die Planung und Umsetzung eines Musikvideos sowie die Entwicklung einer datenbasierten 
+              Deutscher Trap zählt zu den am stärksten wachsenden Genres im deutschsprachigen Raum.
+              Diese Diplomarbeit dokumentiert den Ablauf einer professionellen Musikproduktion,
+              die Planung und Umsetzung eines Musikvideos sowie die Entwicklung einer datenbasierten
               Marketing-Strategie für erfolgreiche Vermarktung und Distribution.
             </p>
           </div>
 
           <div className="flex flex-wrap gap-4 justify-center items-center pt-8 animate-slide-up" style={{ animationDelay: "0.4s" }}>
             <a target="_blank" href="https://www.tgm.ac.at/">
-            <div className="glass glass-hover rounded-2xl px-6 py-3">
-              <p className="text-sm text-muted-foreground">Schule</p>
-              <p className="text-lg font-semibold">TGM</p>
-            </div>
+              <div className="glass glass-hover rounded-2xl px-6 py-3">
+                <p className="text-sm text-muted-foreground">Schule</p>
+                <p className="text-lg font-semibold">TGM</p>
+              </div>
             </a>
             <div className="glass rounded-2xl px-6 py-3">
               <p className="text-sm text-muted-foreground">Klasse</p>
@@ -235,16 +243,15 @@ const Index = () => {
                   onClick={() => toggleCard(member.name)}
                 >
                   <div
-                    className={`relative w-full h-full transition-transform duration-700 transform-style-3d ${
-                      isFlipped ? "rotate-y-180" : ""
-                    }`}
+                    className={`relative w-full h-full transition-transform duration-700 transform-style-3d ${isFlipped ? "rotate-y-180" : ""
+                      }`}
                   >
                     {/* Vorderseite */}
                     <Card className="absolute w-full h-full glass border-0 p-8 space-y-6 backface-hidden transition-shadow duration-300 hover:shadow-[0_0_60px_hsl(0_84%_60%/0.4)]">
                       <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${member.gradient} flex items-center justify-center glow`}>
                         <Icon className="w-8 h-8 text-white" />
                       </div>
-                      
+
                       <div className="space-y-2">
                         <h3 className="text-2xl font-bold">{member.name}</h3>
                         <p className="text-primary font-medium">{member.role}</p>
@@ -266,8 +273,8 @@ const Index = () => {
                         <p className="text-lg font-medium text-primary">{member.role}</p>
                         <div className="flex items-center gap-2 justify-center pt-4">
                           <Mail className="w-5 h-5 text-primary" />
-                          <a 
-                            href={`mailto:${member.email}`} 
+                          <a
+                            href={`mailto:${member.email}`}
                             className="text-foreground hover:text-primary transition-colors"
                             onClick={(e) => e.stopPropagation()}
                           >
@@ -292,7 +299,7 @@ const Index = () => {
               <span className="gradient-text">Zielsetzung</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Einblick in die Produktionsprozesse gewähren, Analyse dessen und einen Nutzen 
+              Einblick in die Produktionsprozesse gewähren, Analyse dessen und einen Nutzen
               aus den gemachten Erfahrungen ziehen
             </p>
           </div>
@@ -331,7 +338,7 @@ const Index = () => {
                 <div className="space-y-2 flex-1">
                   <h3 className="text-2xl font-bold">Fertiger Track</h3>
                   <p className="text-foreground/80 leading-relaxed">
-                    Ein vollständig produzierter Song mit Beat, Rap-Parts, professionellem Mixing und Mastering. 
+                    Ein vollständig produzierter Song mit Beat, Rap-Parts, professionellem Mixing und Mastering.
                     Veröffentlicht auf Spotify und weiteren Streaming-Plattformen (.wav Datei)
                   </p>
                 </div>
@@ -346,7 +353,7 @@ const Index = () => {
                 <div className="space-y-2 flex-1">
                   <h3 className="text-2xl font-bold">Musikvideo & Content</h3>
                   <p className="text-foreground/80 leading-relaxed">
-                    Vollständiges Musikvideo für YouTube, ergänzt durch Teaser-Clips und Behind-the-Scenes-Material 
+                    Vollständiges Musikvideo für YouTube, ergänzt durch Teaser-Clips und Behind-the-Scenes-Material
                     zur Promotion des Hauptprodukts (.mp4 Datei)
                   </p>
                 </div>
@@ -361,7 +368,7 @@ const Index = () => {
                 <div className="space-y-2 flex-1">
                   <h3 className="text-2xl font-bold">Data Science Analyse</h3>
                   <p className="text-foreground/80 leading-relaxed">
-                    Datenbasierte Marketing-Strategie mit konkreten Methoden für Distribution und Promotion auf 
+                    Datenbasierte Marketing-Strategie mit konkreten Methoden für Distribution und Promotion auf
                     Social Media zur gezielten Steigerung der Reichweite (Text-Datei)
                   </p>
                 </div>
@@ -380,7 +387,7 @@ const Index = () => {
               <span className="text-sm font-medium">Zeitplan</span>
             </div>
             <h2 className="text-4xl sm:text-5xl font-bold">
-              Projekt <span className="gradient-text">Meilensteine</span>
+              <span className="gradient-text">Meilensteine</span>
             </h2>
           </div>
 
@@ -389,7 +396,7 @@ const Index = () => {
               {milestones.map((milestone, index) => {
                 const isFirst = index === 0;
                 const isLast = index === milestones.length - 1;
-                
+
                 return (
                   <div
                     key={index}
@@ -400,12 +407,12 @@ const Index = () => {
                     {!isLast && (
                       <div className="absolute left-8 top-6 w-0.5 h-[calc(100%+2rem)] bg-gradient-to-b from-primary via-secondary to-accent" />
                     )}
-                    
+
                     {/* Timeline dot */}
                     <div className="absolute left-6 top-6 w-5 h-5 rounded-full bg-gradient-to-br from-primary to-secondary glow flex items-center justify-center z-10">
                       <CheckCircle2 className="w-3 h-3 text-white" />
                     </div>
-                    
+
                     <div className="glass glass-hover rounded-2xl p-6 space-y-2">
                       <div className="flex flex-wrap items-center gap-3">
                         <span className="text-sm font-semibold text-primary px-3 py-1 rounded-full glass">
