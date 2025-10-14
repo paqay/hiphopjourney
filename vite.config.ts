@@ -8,8 +8,8 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  base: '/hiphopjourney/',
-  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+  base: '/',
+  plugins: [react()].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
