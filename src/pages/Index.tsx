@@ -2,16 +2,58 @@ import { Music, Video, TrendingUp, Users, Mail, Calendar, CheckCircle2 } from "l
 import { Card } from "@/components/ui/card";
 import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
 import hiphopJourneyTag from "@/assets/HHJ_Spin_3D_Logo.webm";
+import hiphopJourneyTagFallback from "@/assets/hiphop-journey-tag.svg";
 import logoImage from "@/assets/HHJ_logo_w.png";
 import { useState, useEffect } from "react";
 
 const Index = () => {
   const [flippedCards, setFlippedCards] = useState<{ [key: string]: boolean }>({});
   const [activeSection, setActiveSection] = useState("hero");
+  const [supportsWebM, setSupportsWebM] = useState<boolean | null>(null);
 
   const toggleCard = (name: string) => {
     setFlippedCards(prev => ({ ...prev, [name]: !prev[name] }));
   };
+
+  useEffect(() => {
+    // Runtime capability test: if the browser truly plays our WebM (with alpha), keep video; otherwise fallback
+    try {
+      const testVideo = document.createElement('video');
+      const canPlay = !!testVideo.canPlayType && testVideo.canPlayType('video/webm') !== '';
+      if (!canPlay) {
+        setSupportsWebM(false);
+        return;
+      }
+      testVideo.muted = true;
+      testVideo.playsInline = true;
+      // Same-origin on GitHub Pages, but set to be safe
+      testVideo.crossOrigin = 'anonymous';
+      testVideo.src = hiphopJourneyTag;
+      const onLoaded = () => {
+        try {
+          const w = Math.max(2, Math.min(8, testVideo.videoWidth || 2));
+          const h = Math.max(2, Math.min(8, testVideo.videoHeight || 2));
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) throw new Error('no ctx');
+          ctx.drawImage(testVideo, 0, 0, w, h);
+          const data = ctx.getImageData(1, 1, 1, 1).data;
+          const alpha = data[3];
+          // If alpha channel is present for transparent corner, expect very low alpha; otherwise treat as unsupported
+          setSupportsWebM(alpha < 10);
+        } catch {
+          setSupportsWebM(false);
+        }
+      };
+      testVideo.addEventListener('loadeddata', onLoaded, { once: true });
+      // Safety timeout (network or codec errors)
+      setTimeout(() => setSupportsWebM((v) => (v === null ? false : v)), 3000);
+    } catch {
+      setSupportsWebM(false);
+    }
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -162,25 +204,40 @@ const Index = () => {
       <section id="hero" className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20">
         <div className="max-w-6xl mx-auto text-center space-y-8 animate-fade-in">
           <div className="space-y-8">
-            <video
-              ref={(video) => {
-                if (video) {
-                  video.onended = () => {
-                    setTimeout(() => {
-                      video.currentTime = 0;
-                      video.play();
-                    }, 1000); // Wait 2 seconds before restarting
-                  };
-                }
-              }}
-              src={hiphopJourneyTag}
-              autoPlay
-              muted
-              playsInline
-              className="w-full max-w-3xl mx-auto animate-float filter drop-shadow-2xl rounded-2xl"
-            >
-              Your browser does not support the video tag.
-            </video>
+            {supportsWebM === true ? (
+              <video
+                ref={(video) => {
+                  if (video) {
+                    video.onended = () => {
+                      setTimeout(() => {
+                        video.currentTime = 0;
+                        video.play();
+                      }, 1000); // Wait 1 second before restarting
+                    };
+                  }
+                }}
+                src={hiphopJourneyTag}
+                autoPlay
+                muted
+                playsInline
+                className="w-full max-w-3xl mx-auto animate-float filter drop-shadow-2xl rounded-2xl"
+              >
+                Your browser does not support the video tag.
+              </video>
+) : supportsWebM === false ? (
+              <img
+                src={hiphopJourneyTagFallback}
+                alt="Hip Hop Journey"
+                className="w-full max-w-3xl mx-auto animate-float filter drop-shadow-2xl rounded-2xl"
+              />
+            ) : (
+              // While detection runs (null), show fallback to avoid black flash on unsupported devices
+              <img
+                src={hiphopJourneyTagFallback}
+                alt="Hip Hop Journey"
+                className="w-full max-w-3xl mx-auto animate-float filter drop-shadow-2xl rounded-2xl"
+              />
+            )}
 
 
             <p className="text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto">
