@@ -396,6 +396,12 @@ const Index = () => {
               {milestones.map((milestone, index) => {
                 const isFirst = index === 0;
                 const isLast = index === milestones.length - 1;
+                
+                // Parse milestone date and compare to 15.10.2025
+                const [day, month, year] = milestone.date.split('.').map(Number);
+                const milestoneDate = new Date(year, month - 1, day);
+                const cutoffDate = new Date(2025, 9, 15); // October 15, 2025
+                const isCompleted = milestoneDate <= cutoffDate;
 
                 return (
                   <div
@@ -405,20 +411,32 @@ const Index = () => {
                   >
                     {/* Timeline line - nur zwischen Elementen */}
                     {!isLast && (
-                      <div className="absolute left-8 top-6 w-0.5 h-[calc(100%+2rem)] bg-gradient-to-b from-primary via-secondary to-accent" />
+                      <div className={`absolute left-8 top-6 w-0.5 h-[calc(100%+2rem)] ${
+                        isCompleted 
+                          ? "bg-gradient-to-b from-primary via-secondary to-accent" 
+                          : "bg-muted"
+                      }`} />
                     )}
 
                     {/* Timeline dot */}
-                    <div className="absolute left-6 top-6 w-5 h-5 rounded-full bg-gradient-to-br from-primary to-secondary glow flex items-center justify-center z-10">
-                      <CheckCircle2 className="w-3 h-3 text-white" />
+                    <div className={`absolute left-6 top-6 w-5 h-5 rounded-full flex items-center justify-center z-10 ${
+                      isCompleted 
+                        ? "bg-gradient-to-br from-primary to-secondary glow" 
+                        : "bg-muted"
+                    }`}>
+                      <CheckCircle2 className={`w-3 h-3 ${isCompleted ? "text-white" : "text-muted-foreground"}`} />
                     </div>
 
                     <div className="glass glass-hover rounded-2xl p-6 space-y-2">
                       <div className="flex flex-wrap items-center gap-3">
-                        <span className="text-sm font-semibold text-primary px-3 py-1 rounded-full glass">
+                        <span className={`text-sm font-semibold px-3 py-1 rounded-full glass ${
+                          isCompleted ? "text-primary" : "text-muted-foreground"
+                        }`}>
                           {milestone.date}
                         </span>
-                        <h3 className="text-lg font-semibold text-foreground">
+                        <h3 className={`text-lg font-semibold ${
+                          isCompleted ? "text-foreground" : "text-muted-foreground"
+                        }`}>
                           {milestone.title}
                         </h3>
                       </div>
