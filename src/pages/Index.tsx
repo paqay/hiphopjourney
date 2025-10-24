@@ -403,6 +403,14 @@ const Index = () => {
                 const cutoffDate = new Date(2025, 9, 15); // October 15, 2025
                 const isCompleted = milestoneDate <= cutoffDate;
 
+                // Check if next milestone is completed (for line color)
+                let isNextCompleted = false;
+                if (!isLast) {
+                  const [nextDay, nextMonth, nextYear] = milestones[index + 1].date.split('.').map(Number);
+                  const nextMilestoneDate = new Date(nextYear, nextMonth - 1, nextDay);
+                  isNextCompleted = nextMilestoneDate <= cutoffDate;
+                }
+
                 return (
                   <div
                     key={index}
@@ -412,7 +420,7 @@ const Index = () => {
                     {/* Timeline line - nur zwischen Elementen */}
                     {!isLast && (
                       <div className={`absolute left-8 top-6 w-0.5 h-[calc(100%+2rem)] ${
-                        isCompleted 
+                        isNextCompleted 
                           ? "bg-gradient-to-b from-primary via-secondary to-accent" 
                           : "bg-muted"
                       }`} />
