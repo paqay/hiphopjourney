@@ -4,6 +4,9 @@ import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
 import hiphopJourneyTag from "@/assets/HHJ_Spin_3D_Logo.webm";
 import hiphopJourneyTagFallback from "@/assets/hiphop-journey-tag.svg";
 import logoImage from "@/assets/HHJ_logo_w.png";
+import trPortrait from "@/assets/tr_portrait.jpeg";
+import jePortrait from "@/assets/je_portrait.jpeg";
+import mePortrait from "@/assets/me_portrait.jpeg";
 import { useState, useEffect } from "react";
 
 const Index = () => {
@@ -101,6 +104,7 @@ const Index = () => {
       description: "Gestaltung, Produktion und Analyse von Rap-Parts, Beat-Komposition sowie Mixing & Mastering",
       email: "jebner@student.tgm.ac.at",
       icon: Music,
+      portrait: jePortrait,
       gradient: "from-primary to-secondary",
     },
     {
@@ -110,6 +114,7 @@ const Index = () => {
       description: "Drehplanung, Kameraführung und Postproduktion des Musikvideos und der Promotionclips",
       email: "mel2@student.tgm.ac.at",
       icon: Video,
+      portrait: mePortrait,
       gradient: "from-secondary to-accent",
     },
     {
@@ -119,6 +124,7 @@ const Index = () => {
       description: "Gestaltung von Rap-Parts und Data Science Analyse der Promotion",
       email: "tristic@student.tgm.ac.at",
       icon: TrendingUp,
+      portrait: trPortrait,
       gradient: "from-accent to-primary",
     },
   ];
@@ -322,8 +328,12 @@ const Index = () => {
 
                     {/* Rückseite */}
                     <Card className="absolute w-full h-full glass border-0 p-8 rotate-y-180 backface-hidden flex flex-col items-center justify-center space-y-6 transition-shadow duration-300 hover:shadow-[0_0_60px_hsl(0_84%_60%/0.4)]">
-                      <div className={`w-48 h-48 rounded-2xl bg-gradient-to-br ${member.gradient} flex items-center justify-center glow`}>
-                        <Icon className="w-24 h-24 text-white" />
+                      <div className="w-48 h-48 rounded-2xl overflow-hidden glow">
+                        <img 
+                          src={member.portrait} 
+                          alt={member.name}
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                       <div className="space-y-3 text-center">
                         <h3 className="text-2xl font-bold">{member.name}</h3>
