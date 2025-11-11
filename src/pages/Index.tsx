@@ -1,6 +1,9 @@
-import { Music, Video, TrendingUp, Users, Mail, Calendar, CheckCircle2 } from "lucide-react";
+import { Music, Video, TrendingUp, Users, Mail, Calendar, CheckCircle2, FileText, X, Menu } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import ReactMarkdown from "react-markdown";
 import hiphopJourneyTag from "@/assets/HHJ_Spin_3D_Logo.webm";
 import hiphopJourneyTagFallback from "@/assets/hiphop-journey-tag.svg";
 import logoImage from "@/assets/HHJ_logo_w.png";
@@ -13,54 +16,23 @@ const Index = () => {
   const [flippedCards, setFlippedCards] = useState<{ [key: string]: boolean }>({});
   const [activeSection, setActiveSection] = useState("hero");
   const [supportsWebM, setSupportsWebM] = useState<boolean | null>(null);
+  const [markdownContent, setMarkdownContent] = useState<{ [key: string]: string }>({});
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleCard = (name: string) => {
     setFlippedCards(prev => ({ ...prev, [name]: !prev[name] }));
   };
 
   useEffect(() => {
-    // Runtime capability test: if the browser truly plays our WebM (with alpha), keep video; otherwise fallback
-    try {
-      const testVideo = document.createElement('video');
-      const canPlay = !!testVideo.canPlayType && testVideo.canPlayType('video/webm') !== '';
-      if (!canPlay) {
-        setSupportsWebM(false);
-        return;
-      }
-      testVideo.muted = true;
-      testVideo.playsInline = true;
-      // Same-origin on GitHub Pages, but set to be safe
-      testVideo.crossOrigin = 'anonymous';
-      testVideo.src = hiphopJourneyTag;
-      const onLoaded = () => {
-        try {
-          const w = Math.max(2, Math.min(8, testVideo.videoWidth || 2));
-          const h = Math.max(2, Math.min(8, testVideo.videoHeight || 2));
-          const canvas = document.createElement('canvas');
-          canvas.width = w;
-          canvas.height = h;
-          const ctx = canvas.getContext('2d');
-          if (!ctx) throw new Error('no ctx');
-          ctx.drawImage(testVideo, 0, 0, w, h);
-          const data = ctx.getImageData(1, 1, 1, 1).data;
-          const alpha = data[3];
-          // If alpha channel is present for transparent corner, expect very low alpha; otherwise treat as unsupported
-          setSupportsWebM(alpha < 10);
-        } catch {
-          setSupportsWebM(false);
-        }
-      };
-      testVideo.addEventListener('loadeddata', onLoaded, { once: true });
-      // Safety timeout (network or codec errors)
-      setTimeout(() => setSupportsWebM((v) => (v === null ? false : v)), 3000);
-    } catch {
-      setSupportsWebM(false);
-    }
+    // Check if device is mobile or Safari (Safari has poor WebM alpha support)
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    setSupportsWebM(!isMobile && !isSafari); // Only non-Safari desktop gets WebM
   }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["hero", "team", "objectives", "results", "milestones"];
+      const sections = ["hero", "team", "objectives", "results", "milestones", "dokumentation"];
       const scrollPosition = window.scrollY + 100; // More responsive scroll detection
 
       for (const section of sections) {
@@ -93,6 +65,7 @@ const Index = () => {
         top: offsetPosition,
         behavior: "smooth"
       });
+      setMobileMenuOpen(false); // Close mobile menu after navigation
     }
   };
 
@@ -157,45 +130,126 @@ const Index = () => {
     },
   ];
 
+  const loadMarkdown = async (date: string) => {
+    if (markdownContent[date]) return; // Already loaded
+    
+    try {
+      // Convert date format from DD.MM.YYYY to YYYY-MM-DD for filename
+      const [day, month, year] = date.split('.');
+      const filename = `${year}-${month}-${day}.md`;
+      
+      // Use import.meta.env.BASE_URL to get the correct base path
+      const basePath = import.meta.env.BASE_URL;
+      const response = await fetch(`${basePath}dokumentation/${filename}`);
+      
+      // Check if response is actually a markdown file
+      const contentType = response.headers.get('content-type');
+      const isHtml = contentType?.includes('text/html');
+      
+      if (response.ok && !isHtml) {
+        const text = await response.text();
+        setMarkdownContent(prev => ({ ...prev, [date]: text }));
+      } else {
+        setMarkdownContent(prev => ({ ...prev, [date]: `# Dokumentation vom ${date}\n\nKeine Dokumentation verfügbar.` }));
+      }
+    } catch (error) {
+      setMarkdownContent(prev => ({ ...prev, [date]: `# Dokumentation vom ${date}\n\nFehler beim Laden der Dokumentation.` }));
+    }
+  };
+
+  const dokumentationen = [
+    { date: "25.10.2025" },
+    { date: "08.11.2025" },
+    { date: "22.11.2025" },
+    { date: "06.12.2025" },
+    { date: "20.12.2025" },
+    { date: "03.01.2026" },
+    { date: "17.01.2026" },
+    { date: "31.01.2026" },
+    { date: "14.02.2026" },
+    { date: "28.02.2026" },
+    { date: "14.03.2026" },
+    { date: "28.03.2026" },
+    { date: "11.04.2026" },
+  ];
+
   const menuItems = [
     { id: "hero", label: "Start" },
     { id: "team", label: "Team" },
     { id: "objectives", label: "Ziele" },
     { id: "results", label: "Ergebnisse" },
-    { id: "milestones", label: "Meilensteine" }
+    { id: "milestones", label: "Meilensteine" },
+    { id: "dokumentation", label: "Dokumentation" }
   ];
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Navigation Menubar */}
+      {/* Navigation */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-[40px] backdrop-saturate-[180%]">
-        <div className="container mx-auto px-6 py-3 flex justify-center">
-          <Menubar className="bg-transparent border-0 space-x-1 relative">
-            {menuItems.map((item) => (
-              <MenubarMenu key={item.id}>
-                <MenubarTrigger
-                  onClick={() => scrollToSection(item.id)}
-                  className={`cursor-pointer transition-all duration-300 px-4 py-2 rounded-lg ${item.id === "hero" ? "" : (activeSection === item.id
-                      ? "text-primary"
-                      : "hover:text-primary")
-                    }`}
-                >
-                  {item.id === "hero" ? (
-                    <img
-                      src={logoImage}
-                      alt="Logo"
-                      className={`h-6 transition-all duration-300 ${activeSection === "hero"
-                          ? "[filter:brightness(0)_saturate(100%)_invert(29%)_sepia(95%)_saturate(7441%)_hue-rotate(357deg)_brightness(99%)_contrast(117%)]"
-                          : "hover:[filter:brightness(0)_saturate(100%)_invert(29%)_sepia(95%)_saturate(7441%)_hue-rotate(357deg)_brightness(99%)_contrast(117%)]"
-                        }`}
-                    />
-                  ) : (
-                    item.label
-                  )}
-                </MenubarTrigger>
-              </MenubarMenu>
-            ))}
-          </Menubar>
+        <div className="container mx-auto px-4 sm:px-6 py-3">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex justify-center">
+            <Menubar className="bg-transparent border-0 space-x-1 relative">
+              {menuItems.map((item) => (
+                <MenubarMenu key={item.id}>
+                  <MenubarTrigger
+                    onClick={() => scrollToSection(item.id)}
+                    className={`cursor-pointer transition-all duration-300 px-4 py-2 rounded-lg ${item.id === "hero" ? "" : (activeSection === item.id
+                        ? "text-primary"
+                        : "hover:text-primary")
+                      }`}
+                  >
+                    {item.id === "hero" ? (
+                      <img
+                        src={logoImage}
+                        alt="Logo"
+                        className={`h-6 transition-all duration-300 ${activeSection === "hero"
+                            ? "[filter:brightness(0)_saturate(100%)_invert(29%)_sepia(95%)_saturate(7441%)_hue-rotate(357deg)_brightness(99%)_contrast(117%)]"
+                            : "hover:[filter:brightness(0)_saturate(100%)_invert(29%)_sepia(95%)_saturate(7441%)_hue-rotate(357deg)_brightness(99%)_contrast(117%)]"
+                          }`}
+                      />
+                    ) : (
+                      item.label
+                    )}
+                  </MenubarTrigger>
+                </MenubarMenu>
+              ))}
+            </Menubar>
+          </div>
+
+          {/* Mobile Navigation */}
+          <div className="flex md:hidden items-center justify-between">
+            <img
+              src={logoImage}
+              alt="Logo"
+              className="h-6 cursor-pointer"
+              onClick={() => scrollToSection("hero")}
+            />
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <button className="p-2 hover:bg-primary/10 rounded-lg transition-colors">
+                  <Menu className="w-6 h-6" />
+                </button>
+              </SheetTrigger>
+              <SheetContent side="right" className="glass border-0 w-64">
+                <nav className="flex flex-col space-y-4 mt-8">
+                  {menuItems.filter(item => item.id !== "hero").map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => scrollToSection(item.id)}
+                      className={`text-left px-4 py-3 rounded-lg transition-all duration-300 ${
+                        activeSection === item.id
+                          ? "bg-primary/20 text-primary font-semibold"
+                          : "hover:bg-primary/10 hover:text-primary"
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </nav>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
 
@@ -520,6 +574,85 @@ const Index = () => {
                 );
               })}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Fortschrittsdokumentation Section */}
+      <section id="dokumentation" className="relative py-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16 space-y-4">
+            <div className="inline-flex items-center gap-2 glass rounded-full px-6 py-2 mb-4">
+              <FileText className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium">Fortschritt</span>
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-bold">
+              <span className="gradient-text">Fortschrittsdokumentation</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Dokumentation des Projektfortschritts alle zwei Wochen
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {dokumentationen.map((dok, index) => {
+              // Parse documentation date and compare to today
+              const [day, month, year] = dok.date.split('.').map(Number);
+              const dokDate = new Date(year, month - 1, day);
+              const today = new Date();
+              today.setHours(0, 0, 0, 0); // Reset time to compare dates only
+              const isPast = dokDate <= today;
+              
+              const cardContent = (
+                <Card 
+                  className={`glass border-0 overflow-hidden transition-all duration-300 h-full animate-slide-up ${
+                    isPast 
+                      ? "hover:shadow-[0_0_60px_hsl(0_84%_60%/0.15)] cursor-pointer hover:scale-105" 
+                      : "opacity-40 cursor-not-allowed"
+                  }`}
+                  style={{ animationDelay: `${0.01 * index}s` }}
+                >
+                  <div className="p-4 flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center flex-shrink-0 ${
+                      isPast ? "" : "opacity-50"
+                    }`}>
+                      <FileText className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className={`text-sm font-bold transition-colors truncate ${
+                        isPast ? "" : "text-muted-foreground"
+                      }`}>
+                        {dok.date}
+                      </h3>
+                    </div>
+                  </div>
+                </Card>
+              );
+              
+              return isPast ? (
+                <Dialog key={dok.date}>
+                  <DialogTrigger asChild onClick={() => loadMarkdown(dok.date)}>
+                    {cardContent}
+                  </DialogTrigger>
+                  <DialogContent className="glass border-0 rounded-3xl max-w-2xl max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl font-bold">
+                        Dokumentation vom {dok.date}
+                      </DialogTitle>
+                    </DialogHeader>
+                    <div className="mt-4 prose prose-invert max-w-none">
+                      {markdownContent[dok.date] ? (
+                        <ReactMarkdown>{markdownContent[dok.date]}</ReactMarkdown>
+                      ) : (
+                        <p className="text-foreground/60 italic">Lade Dokumentation...</p>
+                      )}
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              ) : (
+                <div key={dok.date}>{cardContent}</div>
+              );
+            })}
           </div>
         </div>
       </section>
