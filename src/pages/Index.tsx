@@ -1,4 +1,3 @@
-```tsx name=src/pages/Index.tsx
 import { Music, Video, TrendingUp, Users, Mail, Calendar, CheckCircle2, FileText, X, Menu } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -697,4 +696,3 @@ const Index = () => {
 };
 
 export default Index;
-```
