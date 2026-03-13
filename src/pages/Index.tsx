@@ -576,7 +576,7 @@ const Index = () => {
                         ? "bg-gradient-to-br from-primary to-secondary glow" 
                         : "bg-muted"
                     }`}>
-                      <CheckCircle2 className={`w-3 h-3 ${isCompleted ? "text-white" : "text-muted-foreground"}`} />
+                      {isCompleted && <CheckCircle2 className="w-3 h-3 text-white" />}
                     </div>
 
                     <div className="glass glass-hover rounded-2xl p-6 space-y-2">
