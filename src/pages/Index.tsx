@@ -1,4 +1,4 @@
-import { Music, Video, TrendingUp, Users, Mail, Calendar, CheckCircle2, FileText, X, Menu } from "lucide-react";
+import { Music, Video, TrendingUp, Users, Mail, Calendar, CheckCircle2, FileText, X, Menu, Globe } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
@@ -419,7 +419,8 @@ const Index = () => {
                           </a>
                         </div>
                         {member.website && (
-                          <div className="pt-1">
+                          <div className="pt-1 flex items-center justify-center gap-2">
+                            <Globe className="w-4 h-4 text-primary" />
                             <a
                               href={member.website}
                               target="_blank"
