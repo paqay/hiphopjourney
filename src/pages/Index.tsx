@@ -398,7 +398,7 @@ const Index = () => {
 
                     {/* Rückseite */}
                     <Card className="absolute w-full h-full glass border-0 p-8 rotate-y-180 backface-hidden flex flex-col items-center justify-center space-y-6 transition-shadow duration-300 hover:shadow-[0_0_60px_hsl(0_84%_60%/0.4)]">
-                      <div className="w-48 h-48 rounded-2xl overflow-hidden glow">
+                      <div className="w-48 h-48 shrink-0 rounded-2xl overflow-hidden glow">
                         <img 
                           src={member.portrait} 
                           alt={member.name}
