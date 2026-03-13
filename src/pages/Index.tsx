@@ -687,7 +687,15 @@ const Index = () => {
             Diplomarbeit 2025/26 · HTL TGM · 5DHITM
           </p>
           <p className="text-sm text-muted-foreground">
-            Betreuer: Dipl.-Ing. Alexander Wieser
+            Betreuer:{" "}
+            <a
+              href="https://www.sonobelle.com/"
+              target="_blank"
+              rel="noreferrer"
+              className="underline underline-offset-4 hover:text-foreground transition-colors"
+            >
+              Dipl.-Ing. Alexander Wieser
+            </a>
           </p>
         </div>
       </footer>
