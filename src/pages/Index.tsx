@@ -77,6 +77,7 @@ const Index = () => {
       focus: "Beat-Komposition, Mixing & Mastering",
       description: "Gestaltung, Produktion und Analyse von Rap-Parts, Beat-Komposition sowie Mixing & Mastering",
       email: "jebner@student.tgm.ac.at",
+      website: "https://paqay.cc",
       icon: Music,
       portrait: jePortrait,
       gradient: "from-primary to-secondary",
@@ -87,6 +88,7 @@ const Index = () => {
       focus: "Kameraführung & Postproduktion",
       description: "Drehplanung, Kameraführung und Postproduktion des Musikvideos und der Promotionclips",
       email: "mel2@student.tgm.ac.at",
+      website: "",
       icon: Video,
       portrait: mePortrait,
       gradient: "from-secondary to-accent",
@@ -97,6 +99,7 @@ const Index = () => {
       focus: "Rap-Performance & Data Science",
       description: "Gestaltung von Rap-Parts und Data Science Analyse der Promotion",
       email: "tristic@student.tgm.ac.at",
+      website: "",
       icon: TrendingUp,
       portrait: trPortrait,
       gradient: "from-accent to-primary",
@@ -415,6 +418,19 @@ const Index = () => {
                             {member.email}
                           </a>
                         </div>
+                        {member.website && (
+                          <div className="pt-1">
+                            <a
+                              href={member.website}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-foreground hover:text-primary transition-colors underline underline-offset-4"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              paqay.cc
+                            </a>
+                          </div>
+                        )}
                       </div>
                     </Card>
                   </div>
