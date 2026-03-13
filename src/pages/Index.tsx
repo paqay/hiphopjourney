@@ -1,8 +1,10 @@
+```tsx name=src/pages/Index.tsx
 import { Music, Video, TrendingUp, Users, Mail, Calendar, CheckCircle2, FileText, X, Menu } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Progress } from "@/components/ui/progress";
 import ReactMarkdown from "react-markdown";
 import hiphopJourneyTag from "@/assets/HHJ_Spin_3D_Logo.webm";
 import hiphopJourneyTagFallback from "@/assets/hiphop-journey-tag.svg";
@@ -111,9 +113,21 @@ const Index = () => {
     { date: "05.01.2026", title: "Rohschnitt des Musikvideos erstellt" },
     { date: "20.01.2026", title: "Color Grading und visuelle Effekte abgeschlossen" },
     { date: "05.02.2026", title: "Data-Science-Analyse zur Social-Media-Promotion abgeschlossen" },
-    { date: "05.03.2026", title: "Finaler Song und Musikvideo veröffentlicht" },
+    { date: "27.03.2026", title: "Finaler Song und Musikvideo veröffentlicht" },
     { date: "07.04.2026", title: "Abgabe" },
   ];
+
+  const parseGermanDate = (dateStr: string) => {
+    const [day, month, year] = dateStr.split(".").map(Number);
+    return new Date(year, month - 1, day);
+  };
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const completedMilestonesCount = milestones.filter((m) => parseGermanDate(m.date) <= today).length;
+  const milestoneProgressValue =
+    milestones.length > 0 ? Math.round((completedMilestonesCount / milestones.length) * 100) : 0;
 
   const objectives = [
     {
@@ -512,24 +526,34 @@ const Index = () => {
             </h2>
           </div>
 
+          {/* Progress */}
+          <div className="glass rounded-2xl p-6 mb-10">
+            <div className="flex items-center justify-between gap-4 mb-3">
+              <p className="font-semibold">Fortschritt</p>
+              <p className="text-sm text-muted-foreground">
+                {completedMilestonesCount}/{milestones.length} erledigt · {milestoneProgressValue}%
+              </p>
+            </div>
+            <Progress value={milestoneProgressValue} />
+          </div>
+
           <div className="relative">
             <div className="space-y-8">
               {milestones.map((milestone, index) => {
                 const isFirst = index === 0;
                 const isLast = index === milestones.length - 1;
                 
-                // Parse milestone date and compare to 15.10.2025
+                // Parse milestone date and compare to today
                 const [day, month, year] = milestone.date.split('.').map(Number);
                 const milestoneDate = new Date(year, month - 1, day);
-                const cutoffDate = new Date(2025, 9, 15); // October 15, 2025
-                const isCompleted = milestoneDate <= cutoffDate;
+                const isCompleted = milestoneDate <= today;
 
                 // Check if next milestone is completed (for line color)
                 let isNextCompleted = false;
                 if (!isLast) {
                   const [nextDay, nextMonth, nextYear] = milestones[index + 1].date.split('.').map(Number);
                   const nextMilestoneDate = new Date(nextYear, nextMonth - 1, nextDay);
-                  isNextCompleted = nextMilestoneDate <= cutoffDate;
+                  isNextCompleted = nextMilestoneDate <= today;
                 }
 
                 return (
@@ -673,3 +697,4 @@ const Index = () => {
 };
 
 export default Index;
+```
