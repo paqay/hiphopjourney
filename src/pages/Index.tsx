@@ -687,7 +687,7 @@ const Index = () => {
             Diplomarbeit 2025/26 · HTL TGM · 5DHITM
           </p>
           <p className="text-sm text-muted-foreground">
-            Betreuer: Alexander Wieser
+            Betreuer: Dipl.-Ing. Alexander Wieser
           </p>
         </div>
       </footer>
