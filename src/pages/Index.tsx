@@ -397,7 +397,9 @@ const Index = () => {
                     </Card>
 
                     {/* Rückseite */}
-                    <Card className="absolute w-full h-full glass border-0 p-8 rotate-y-180 backface-hidden flex flex-col items-center justify-center space-y-6 transition-shadow duration-300 hover:shadow-[0_0_60px_hsl(0_84%_60%/0.4)]">
+                    <Card className={`absolute w-full h-full glass border-0 p-8 rotate-y-180 backface-hidden flex flex-col items-center justify-center space-y-6 transition-shadow duration-300 hover:shadow-[0_0_60px_hsl(0_84%_60%/0.4)] ${
+                      member.website ? "relative pb-16" : ""
+                    }`}>
                       <div className="w-48 h-48 shrink-0 rounded-2xl overflow-hidden glow">
                         <img 
                           src={member.portrait} 
@@ -418,21 +420,21 @@ const Index = () => {
                             {member.email}
                           </a>
                         </div>
-                        {member.website && (
-                          <div className="pt-1 flex items-center justify-center gap-2">
-                            <Globe className="w-4 h-4 text-primary" />
-                            <a
-                              href={member.website}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="text-foreground hover:text-primary transition-colors underline underline-offset-4"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              paqay.cc
-                            </a>
-                          </div>
-                        )}
                       </div>
+                      {member.website && (
+                        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center justify-center gap-2">
+                          <Globe className="w-4 h-4 text-primary" />
+                          <a
+                            href={member.website}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-foreground hover:text-primary transition-colors underline underline-offset-4"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            paqay.cc
+                          </a>
+                        </div>
+                      )}
                     </Card>
                   </div>
                 </div>
