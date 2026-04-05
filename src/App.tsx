@@ -20,6 +20,14 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
+      <a
+        href="https://open.spotify.com/track/6E6CNj4U715AK0pAtS8ExU"
+        target="_blank"
+        rel="noreferrer"
+        className="fixed bottom-6 right-6 z-50 rounded-full bg-green-600 px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-green-700"
+      >
+        Song released - Jetzt Hören!
+      </a>
     </TooltipProvider>
   </QueryClientProvider>
 );
