@@ -24,7 +24,7 @@ const App = () => (
         href="https://open.spotify.com/track/6E6CNj4U715AK0pAtS8ExU"
         target="_blank"
         rel="noreferrer"
-        className="fixed bottom-6 right-6 z-50 rounded-full bg-green-600 px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-green-700"
+        className="fixed bottom-6 right-6 z-50 rounded-full border border-primary/40 bg-[image:var(--gradient-primary)] px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-all duration-300 hover:-translate-y-1 hover:brightness-110"
       >
         Song released - Jetzt Hören!
       </a>
